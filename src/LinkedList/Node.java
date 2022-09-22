@@ -1,14 +1,11 @@
 package LinkedList;
 
+import java.util.Objects;
+
 public class Node {
     public Object data;
     public Node next;
     public Node prev;
-
-//    public Node() {
-//        this.data = null;
-//        this.next = null;
-//    }
 
     public Node(Object data) {
         this.data = data;
@@ -16,10 +13,21 @@ public class Node {
         this.prev = null;
     }
 
-//    public Node(Object data, Node next) {
-//        this.data = data;
-//        this.next = next;
-//    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o){
+            return true;
+        }
+        if (o == null || data.getClass() != o.getClass()) {
+            return false;
+        }
+        return data.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(data);
+    }
 
     public String toString() {
         return String.valueOf(this.data);
