@@ -3,7 +3,7 @@ package LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-public class LinkedList {
+public class MyLinkedList {
     /*
     head : 첫 번째 노드
     tail : 마지막 노드
@@ -13,15 +13,15 @@ public class LinkedList {
     private Node tail;
     private int size;
 
-    public LinkedList() {
+    public MyLinkedList() {
         this.head = null;
         this.tail = null;
         this.size = 0;
     }
 
     /*
-    add(Object input) : addLast와 동일하게 동작한다.
-    add(int index, Object input) : 지정한 index에 새로운 노드 추가.
+    add(Object input) : addLast()와 동일하게 동작한다.
+    add(int index, Object input) : 지정한 index 에 새로운 노드 추가.
     addFirst(Object input) : 새로운 노드를 맨 첫번째에 추가.
     addLast(Object input) : 새로운 노드를 맨 마지막에 추가.
      */
@@ -174,11 +174,11 @@ public class LinkedList {
         if (this == o){
             return true;
         }
-        if (o == null || getClass() != o.getClass() || this.size != ((LinkedList) o).size()) {
+        if (o == null || getClass() != o.getClass() || this.size != ((MyLinkedList) o).size()) {
             return false;
         }
         Node my = head;
-        Node target = ((LinkedList) o).head;
+        Node target = ((MyLinkedList) o).head;
         while (my != null) {
             if (!(my.equals(target.data))) {
                 return false;
