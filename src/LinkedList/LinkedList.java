@@ -1,52 +1,22 @@
 package LinkedList;
 
 import java.util.NoSuchElementException;
-
-class Test {
-    public static void main(String[] args) {
-//        LinkedList test = new LinkedList();
-//        System.out.println(test);
-//        test.add(0, "hello");
-//        test.add(1);
-//        test.add(true);
-//        test.add(1, "three");
-//        test.add(1, "one");
-//        test.add(100);
-//
-//
-//        System.out.println(test);
-////        test.set(1, "bello");
-//
-//        System.out.println(test);
-//        test.add("add");
-//        System.out.println(test);
-
-//        LinkedList test2 = new LinkedList();
-//        test2.add(0, "hello");
-//        System.out.println(test2);
-//        Object o = test2.removeFirst();
-//        System.out.println("o = " + o);
-//        test2.add("hello");
-//        test2.add(true);
-//        test2.add(1, "middle");
-//        System.out.println(test2);
-//        test2.removeFirst();
-//        test2.removeFirst();
-//        test2.add("hello world");
-//        System.out.println(test2.size());
-//        System.out.println(test2);
-
-    }
-}
+import java.util.Objects;
 
 public class LinkedList {
-    private Node head;  // 첫 번째 노드를 가리키는 head 노드
-    private Node tail;  // 마지막 노드
-    private int size = 0;
+    /*
+    head : 첫 번째 노드
+    tail : 마지막 노드
+    size : 링크드리스트의 사이즈
+     */
+    private Node head;
+    private Node tail;
+    private int size;
 
     public LinkedList() {
         this.head = null;
         this.tail = null;
+        this.size = 0;
     }
 
     /*
@@ -56,11 +26,9 @@ public class LinkedList {
     addLast(Object input) : 새로운 노드를 맨 마지막에 추가.
      */
     public void addFirst(Object input) {
-        Node newNode = new Node(input);
+        Node newNode = newNode(input);
         if (size() == 0) {
-            head = newNode;
-            tail = newNode;
-            size++;
+            firstAddChore(newNode);
             return;
         }
         linkNode(newNode, head);
@@ -68,60 +36,43 @@ public class LinkedList {
         size++;
 
     }
-//    public void addFirst(Object input) {
-//        Node newNode = new Node(input);
-//        linkNode(newNode, head);
-////        newNode.next = head;
-////        head.prev = newNode;
-//        head = newNode;
-//        if (size == 0) {
-//            tail = head;
-//        }
-//        size++;
-//    }
 
     public void addLast(Object input) {
-        Node newNode = new Node(input);
+        Node newNode = newNode(input);
         if (size() == 0) {
-            head = newNode;
-            tail = newNode;
-            size++;
+            firstAddChore(newNode);
             return;
         }
         linkNode(tail, newNode);
-//        tail.next = newNode;
-//        newNode.prev = tail;
         tail = newNode;
         size++;
     }
 
     public void add(int index, Object input) {
-        if (index > this.size()) {
-            throw new IndexOutOfBoundsException("Index: " + index + " Size: " + this.size());
+        if (index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
         if (index == 0) {
             addFirst(input);
             return;
         }
-        if (index == this.size()) {
+        if (index == size) {
             addLast(input);
             return;
         }
-        Node newNode = new Node(input);
+        Node newNode = newNode(input);
         Node prev = findNode(index - 1);
         Node curr = findNode(index);
         linkNode(prev, newNode);
-//        prev.next = newNode;
-//        newNode.prev = prev;
         linkNode(newNode, curr);
-//        newNode.next = curr;
-//        curr.prev = newNode;
         size++;
     }
 
-    public void add(Object input) {
+    public boolean add(Object input) {
         addLast(input);
+        return true;
     }
+
     /*
     remove() : 맨 첫번째 노드를 삭제
     remove(Object o) : o와 일치하는 데이터를 갖고 있는 노드 삭제
@@ -134,23 +85,33 @@ public class LinkedList {
         return removeFirst();
     }
 
-    public Object remove(Object o) {
-        Node target = findNode(o);
-        return target.data;
+    public boolean remove(Object o) {
+        int index = findIndex(o);
+        if (index == -1) {
+            return false;
+        }
+        remove(index);
+        return true;
     }
 
     public Object remove(int index) {
-        Object target = findNode(index).data;
-        return remove(target);
+        checkIndex(index, size);
+        Node target = findNode(index);
+        if (index == 0) {
+            return removeFirst();
+        }
+        if (index == size - 1) {
+            return removeLast();
+        }
+        linkNode(target.prev, target.next);
+        size--;
+        return target.data;
     }
 
     public Object removeFirst() {
         if (this.size() == 0) {
             throw new NoSuchElementException();
         }
-//        Node temp = head;
-//        head = head.next;
-//        head.prev = null;
         return unlinkFirst(head.next);
     }
 
@@ -158,10 +119,6 @@ public class LinkedList {
         if (this.size() == 0) {
             throw new NoSuchElementException();
         }
-//        Node temp = tail;
-//        tail = tail.prev;
-//        tail.next = null;
-//        size--;
         return unlinkLast(tail.prev);
     }
 
@@ -173,6 +130,92 @@ public class LinkedList {
         return this.size == 0;
     }
 
+    public void clear() {
+        head = null;
+        tail = null;
+        size = 0;
+    }
+
+    public boolean contains(Object o) {
+        int index = findIndex(o);
+        return index != -1;
+    }
+
+    public Object element() {
+        if (size == 0) {
+            throw new NoSuchElementException();
+        }
+        return head.data;
+    }
+
+    public Object get(int index) {
+        checkIndex(index, size);
+        Node result = findNode(index);
+        return result.data;
+    }
+
+    public int indexOf(Object o) {
+        return findIndex(o);
+    }
+
+    public int lastIndexOf(Object o) {
+        return findLastIndex(o);
+    }
+
+    public Object set(int index, Object element) {
+        checkIndex(index, size);
+        Node old = findNode(index);
+        Object temp = old.data;
+        old.data = element;
+        return temp;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass() || this.size != ((LinkedList) o).size()) {
+            return false;
+        }
+        Node my = head;
+        Node target = ((LinkedList) o).head;
+        while (my != null) {
+            if (!(my.equals(target.data))) {
+                return false;
+            }
+            my = my.next;
+            target = target.next;
+        }
+        return true;
+    }
+
+    public int hashCode() {
+        int result = 1;
+        Node curr = head;
+        while (curr != null) {
+            result = 31 * result + Objects.hash(curr);
+            curr = curr.next;
+        }
+
+        return result;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        Node temp = head;
+        sb.append("[");
+        for (int i = 0; i < size(); i++) {
+            sb.append(temp.data)
+                    .append(", ");
+            temp = temp.next;
+        }
+        if (sb.length() > 1) {
+            sb.delete(sb.length() - 2, sb.length());
+        }
+        sb.append("]");
+        return String.valueOf(sb);
+    }
+
     private Node findNode(int index) {
         Node temp = head;
         for (int i = 0; i < index; i++) {
@@ -181,26 +224,35 @@ public class LinkedList {
         return temp;
     }
 
-    private Node findNode(Object target) {
+    private int findIndex(Object target) {
         Node temp = head;
-        Node resultTemp = null;
+        int index = -1;
         for (int i = 0; i < size(); i++) {
-            if (temp.data == target) {
-                resultTemp = temp;
+            if (temp.equals(target)) {
+                index = i;
+                break;
             }
             temp = temp.next;
         }
-        return resultTemp;
+        return index;
+    }
+
+    private int findLastIndex(Object target) {
+        Node temp = head;
+        int index = -1;
+        for (int i = 0; i < size(); i++) {
+            if (temp.equals(target)) {
+                index = i;
+            }
+            temp = temp.next;
+        }
+        return index;
     }
 
     private void linkNode(Node prev, Node next) {
         prev.next = next;
         next.prev = prev;
     }
-
-//    private void unlinkNode(Node prev, Node next) {
-//        prev.n
-//    }
 
     private Object unlinkFirst(Node newHead) {
         Node temp = head;
@@ -230,19 +282,19 @@ public class LinkedList {
         return temp.data;
     }
 
-
-    public String toString() {
-        StringBuffer sb = new StringBuffer();
-        Node temp = head;
-        sb.append("[");
-        for (int i = 0; i < size(); i++) {
-            sb.append(temp.data)
-                    .append(", ");
-            temp = temp.next;
-        }
-        sb.delete(sb.length() - 2, sb.length());
-        sb.append("]");
-        return String.valueOf(sb);
+    private Node newNode(Object o) {
+        return new Node(o);
     }
 
+    private void firstAddChore(Node newNode) {
+        head = newNode;
+        tail = newNode;
+        size++;
+    }
+
+    private void checkIndex(int index, int size) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+    }
 }
