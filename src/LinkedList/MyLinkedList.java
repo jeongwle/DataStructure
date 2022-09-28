@@ -1,5 +1,6 @@
 package LinkedList;
 
+import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -214,6 +215,95 @@ public class MyLinkedList {
         }
         sb.append("]");
         return String.valueOf(sb);
+    }
+
+    public ListIterator myListIterator(int index) {
+        checkIndex(index, size);
+        return new MyListIterator(index);
+    }
+
+    private class MyListIterator implements ListIterator {
+        private Node lastReturned;
+        private Node next;
+        private int nextIndex;
+
+        MyListIterator(int index) {
+            next = findNode(index);
+            nextIndex = index;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return nextIndex < size;
+        }
+
+        @Override
+        public Object next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            lastReturned = next;
+            next = next.next;
+            nextIndex++;
+            return lastReturned.data;
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return nextIndex > 0;
+        }
+
+        @Override
+        public Object previous() {
+            if (!hasPrevious()) {
+                throw new NoSuchElementException();
+            }
+            lastReturned = next = (next == null) ? tail : next.prev;
+            nextIndex--;
+            return lastReturned.data;
+        }
+
+        @Override
+        public int nextIndex() {
+            return nextIndex;
+        }
+
+        @Override
+        public int previousIndex() {
+            return nextIndex - 1;
+        }
+
+        @Override
+        public void remove() {
+            if (lastReturned == null) {
+                throw new IllegalStateException();
+            }
+
+            Node lastNext = lastReturned.next;
+            int index = findIndex(lastReturned);
+            MyLinkedList.this.remove(index);
+            if (next == lastReturned) {
+                next = lastNext;
+            } else {
+                nextIndex--;
+            }
+            lastReturned = null;
+        }
+
+        @Override
+        public void set(Object o) {
+            if (lastReturned == null) {
+                throw new IllegalStateException();
+            }
+            lastReturned.data = o;
+        }
+
+        @Override
+        public void add(Object o) {
+            lastReturned = null;
+            MyLinkedList.this.add(o);
+            nextIndex++;
+        }
     }
 
     private Node findNode(int index) {
