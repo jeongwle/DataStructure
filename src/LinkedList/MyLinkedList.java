@@ -217,11 +217,15 @@ public class MyLinkedList {
         return String.valueOf(sb);
     }
 
+    @SuppressWarnings("rawtypes")
     public ListIterator myListIterator(int index) {
-        checkIndex(index, size);
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
         return new MyListIterator(index);
     }
 
+    @SuppressWarnings("rawtypes")
     private class MyListIterator implements ListIterator {
         private Node lastReturned;
         private Node next;
