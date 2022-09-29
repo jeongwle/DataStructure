@@ -2,6 +2,7 @@ package LinkedList;
 
 import java.text.MessageFormat;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 @SuppressWarnings({"rawtypes", "unchecked", "ConstantConditions"})
 public class Main {
@@ -9,11 +10,8 @@ public class Main {
         LinkedList origin = new LinkedList();
         MyLinkedList mine = new MyLinkedList();
 
-        printBoth(origin, mine);
-        addBoth(origin, mine);
-        removeBoth(origin, mine);
-        clearAndIsEmptyBoth(origin, mine);
-        containsBoth(origin, mine);
+        methodTest(origin, mine);
+        iteratorTest(origin, mine);
     }
 
     static void printBoth(LinkedList origin, MyLinkedList mine) {
@@ -26,6 +24,138 @@ public class Main {
         System.out.println(result);
         System.out.println("-----------------------------");
         System.out.println();
+    }
+
+    static void methodTest(LinkedList origin, MyLinkedList mine) {
+        printBoth(origin, mine);
+        addBoth(origin, mine);
+        removeBoth(origin, mine);
+        clearAndIsEmptyBoth(origin, mine);
+        containsBoth(origin, mine);
+        elementBoth(origin, mine);
+        getBoth(origin, mine);
+        indexOfBoth(origin, mine);
+        lastIndexOfBoth(origin, mine);
+        setBoth(origin, mine);
+    }
+
+    static void iteratorTest(LinkedList origin, MyLinkedList mine) {
+        ListIterator oIt = origin.listIterator(0);
+        ListIterator mIt = mine.myListIterator(0);
+
+        System.out.println("mIt.hasPrevious() = " + mIt.hasPrevious());
+        System.out.println("oIt.hasPrevious() = " + oIt.hasPrevious());
+        System.out.println();
+
+        System.out.println("mIt.hasNext() = " + mIt.hasNext());
+        System.out.println("oIt.hasNext() = " + oIt.hasNext());
+        System.out.println();
+
+        while (mIt.hasNext()) {
+            System.out.print("mIt.next() = " + mIt.next() + ", ");
+            System.out.print("mIt.nextIndex() = " + mIt.nextIndex() + ", ");
+            System.out.print("mIt.previousIndex() = " + mIt.previousIndex());
+            System.out.println();
+        }
+        System.out.println();
+        while (oIt.hasNext()) {
+            System.out.print("oIt.next() = " + oIt.next() + ", ");
+            System.out.print("oIt.nextIndex() = " + oIt.nextIndex() + ", ");
+            System.out.print("oIt.previousIndex() = " + oIt.previousIndex());
+            System.out.println();
+        }
+        printBoth(origin, mine);
+
+        while (mIt.hasPrevious()) {
+            System.out.print("mIt.previous() = " + mIt.previous() + ", ");
+            System.out.print("mIt.nextIndex() = " + mIt.nextIndex() + ", ");
+            System.out.print("mIt.previousIndex() = " + mIt.previousIndex());
+            System.out.println();
+        }
+        System.out.println();
+        while (oIt.hasPrevious()) {
+            System.out.print("oIt.previous() = " + oIt.previous() + ", ");
+            System.out.print("oIt.nextIndex() = " + oIt.nextIndex() + ", ");
+            System.out.print("oIt.previousIndex() = " + oIt.previousIndex());
+            System.out.println();
+        }
+
+        mIt = origin.listIterator(7);
+        oIt = mine.myListIterator(7);
+
+        while (mIt.hasPrevious() && oIt.hasPrevious()) {
+            mIt.previous();
+            oIt.previous();
+            mIt.remove();
+            oIt.remove();
+            printBoth(origin, mine);
+        }
+
+        for (int i = 1; i < 5; i++) {
+            mIt.add(i);
+            oIt.add(i);
+            printBoth(origin, mine);
+        }
+
+        while (mIt.hasPrevious() && oIt.hasPrevious()) {
+            mIt.previous();
+            oIt.previous();
+            mIt.set(7);
+            oIt.set(7);
+            printBoth(origin, mine);
+        }
+    }
+
+    static void setBoth(LinkedList origin, MyLinkedList mine) {
+        System.out.println("Object set(int index, Object element)");
+        System.out.println("origin.set(1, 10) = " + origin.set(1, 10));
+        System.out.println("mine.set(1, 10) = " + mine.set(1, 10));
+        printBoth(origin, mine);
+    }
+
+    static void lastIndexOfBoth(LinkedList origin, MyLinkedList mine) {
+        System.out.println("int lastIndexOf(Object o)");
+        for (int i = 1; i < 4; i++) {
+            System.out.println("i = " + i);
+            System.out.println("origin.lastIndexOf(i) = " + origin.lastIndexOf(i));
+            System.out.println("mine.lastIndexOf(i) = " + mine.lastIndexOf(i));
+            System.out.println();
+        }
+        printBoth(origin, mine);
+    }
+
+    static void indexOfBoth(LinkedList origin, MyLinkedList mine) {
+        origin.add(2);
+        origin.add(1);
+        mine.add(2);
+        mine.add(1);
+        System.out.println("int indexOf(Object o)");
+        for (int i = 1; i < 4; i++) {
+            System.out.println("i = " + i);
+            System.out.println("origin.indexOf(i) = " + origin.indexOf(i));
+            System.out.println("mine.indexOf(i) = " + mine.indexOf(i));
+            System.out.println();
+        }
+        printBoth(origin, mine);
+    }
+
+    static void getBoth(LinkedList origin, MyLinkedList mine) {
+        System.out.println("Object get(int index)");
+        System.out.println();
+        for (int i = 1; i < 4; i++) {
+            System.out.println("i = " + i);
+            System.out.println("origin.get(i) = " + origin.get(i));
+            System.out.println("mine.get(i) = " + mine.get(i));
+            System.out.println();
+        }
+        System.out.println("-----------------------------");
+    }
+
+    static void elementBoth(LinkedList origin, MyLinkedList mine) {
+        System.out.println("Object element()");
+        System.out.println("origin.element() = " + origin.element());
+        System.out.println("mine.element() = " + mine.element());
+        printBoth(origin, mine);
     }
 
     static void containsBoth(LinkedList origin, MyLinkedList mine) {
