@@ -22,6 +22,7 @@ public class MyStack<E> {
         Node<E> newNode = newNode(item);
         top.next = newNode;
         top = newNode;
+        size++;
         return item;
     }
 
@@ -44,22 +45,67 @@ public class MyStack<E> {
     }
 
     public int search(Object o) {
+        int i = findLast(o);
 
+        if (i >= 0) {
+            return size - i;
+        }
         return -1;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        Node<E> temp = bottom;
+        while (temp != null) {
+            sb.append(temp.item)
+                    .append(", ");
+            temp = temp.next;
+        }
+        if (sb.length() > 1) {
+            sb.delete(sb.length() - 2, sb.length());
+        }
+        sb.append("]");
+        return String.valueOf(sb);
     }
 
     private void removeElement() {
         Node<E> topPrev = findTopPrevNode();
+        if (topPrev == null) {
+            bottom = top = null;
+            size--;
+            return;
+        }
         topPrev.next = null;
+        top = topPrev;
         size--;
     }
 
     private Node<E> findTopPrevNode() {
+        if (size == 1) {
+            return null;
+        }
         Node<E> curr = bottom;
-        for (int i = 0; i < size - 1; i++) {
+        for (int i = 0; i < size - 2; i++) {
             curr = curr.next;
         }
         return curr;
+    }
+
+    private int findLast(Object o) {
+        Node<E> curr = bottom;
+        int temp = -1;
+        for (int i = 0; i < size; i++) {
+            if (o.equals(curr.item)) {
+                temp = i;
+            }
+            curr = curr.next;
+        }
+        return temp;
     }
 
     private Node<E> newNode(E item) {
