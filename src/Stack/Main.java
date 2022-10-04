@@ -16,6 +16,7 @@ public class Main {
         pop(origin, mine);
         empty(origin, mine);
         search(origin, mine);
+        peek(origin, mine);
     }
 
     public static void printStack(Stack<Integer> origin, MyStack<Integer> mine) {
@@ -28,7 +29,24 @@ public class Main {
         System.out.println();
     }
 
+    public static void peek(Stack<Integer> origin, MyStack<Integer> mine) {
+        System.out.println("E peek()");
+        System.out.println();
+        System.out.println("origin = " + origin);
+        System.out.println("origin.size() = " + origin.size());
+        System.out.println("mine = " + mine);
+        System.out.println("mine.size() = " + mine.size());
+        System.out.println();
+
+        Integer o = origin.peek();
+        Integer m = mine.peek();
+        System.out.println("origin.peek() = " + o);
+        System.out.println("mine.peek() = " + m);
+        System.out.println();
+        printStack(origin, mine);
+    }
     public static void push(Stack<Integer> origin, MyStack<Integer> mine) {
+        System.out.println("E push()");
         for (int i = 0; i < 11; i++) {
             if (i % 2 == 0) {
                 Integer o;
@@ -43,6 +61,7 @@ public class Main {
     }
 
     public static void pop(Stack<Integer> origin, MyStack<Integer> mine) {
+        System.out.println("E pop()");
         for (int i = 0; i < 6; i++) {
             Integer o;
             Integer m;
@@ -55,6 +74,7 @@ public class Main {
     }
 
     public static void empty(Stack<Integer> origin, MyStack<Integer> mine) {
+        System.out.println("boolean empty()");
         System.out.println("origin.empty() = " + origin.empty());
         System.out.println("mine.empty( = " + mine.empty());
         System.out.println();
@@ -62,6 +82,7 @@ public class Main {
     }
 
     public static void search(Stack<Integer> origin, MyStack<Integer> mine) {
+        System.out.println("int search(int index)");
         origin.push(0);
         origin.push(2);
         origin.push(4);
