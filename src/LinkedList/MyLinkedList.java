@@ -4,15 +4,15 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-public class MyLinkedList {
+public class MyLinkedList<E> {
     /*
     head : 첫 번째 노드
     tail : 마지막 노드
     size : 링크드리스트의 사이즈
      */
-    private Node head;
-    private Node tail;
-    private int size;
+    protected Node<E> head;
+    protected Node<E> tail;
+    protected int size;
 
     public MyLinkedList() {
         this.head = null;
@@ -26,8 +26,8 @@ public class MyLinkedList {
     addFirst(Object input) : 새로운 노드를 맨 첫번째에 추가.
     addLast(Object input) : 새로운 노드를 맨 마지막에 추가.
      */
-    public void addFirst(Object input) {
-        Node newNode = newNode(input);
+    public void addFirst(E input) {
+        Node<E> newNode = newNode(input);
         if (size() == 0) {
             firstAddChore(newNode);
             return;
@@ -38,8 +38,8 @@ public class MyLinkedList {
 
     }
 
-    public void addLast(Object input) {
-        Node newNode = newNode(input);
+    public void addLast(E input) {
+        Node<E> newNode = newNode(input);
         if (size() == 0) {
             firstAddChore(newNode);
             return;
@@ -49,7 +49,7 @@ public class MyLinkedList {
         size++;
     }
 
-    public void add(int index, Object input) {
+    public void add(int index, E input) {
         if (index > size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
@@ -61,15 +61,15 @@ public class MyLinkedList {
             addLast(input);
             return;
         }
-        Node newNode = newNode(input);
-        Node prev = findNode(index - 1);
-        Node curr = findNode(index);
+        Node<E> newNode = newNode(input);
+        Node<E> prev = findNode(index - 1);
+        Node<E> curr = findNode(index);
         linkNode(prev, newNode);
         linkNode(newNode, curr);
         size++;
     }
 
-    public boolean add(Object input) {
+    public boolean add(E input) {
         addLast(input);
         return true;
     }
@@ -97,7 +97,7 @@ public class MyLinkedList {
 
     public Object remove(int index) {
         checkIndex(index, size);
-        Node target = findNode(index);
+        Node<E> target = findNode(index);
         if (index == 0) {
             return removeFirst();
         }
@@ -151,7 +151,7 @@ public class MyLinkedList {
 
     public Object get(int index) {
         checkIndex(index, size);
-        Node result = findNode(index);
+        Node<E> result = findNode(index);
         return result.data;
     }
 
@@ -163,9 +163,9 @@ public class MyLinkedList {
         return findLastIndex(o);
     }
 
-    public Object set(int index, Object element) {
+    public Object set(int index, E element) {
         checkIndex(index, size);
-        Node old = findNode(index);
+        Node<E> old = findNode(index);
         Object temp = old.data;
         old.data = element;
         return temp;
@@ -175,11 +175,11 @@ public class MyLinkedList {
         if (this == o){
             return true;
         }
-        if (o == null || getClass() != o.getClass() || this.size != ((MyLinkedList) o).size()) {
+        if (o == null || getClass() != o.getClass() || this.size != ((MyLinkedList<?>) o).size()) {
             return false;
         }
-        Node my = head;
-        Node target = ((MyLinkedList) o).head;
+        Node<E> my = head;
+        Node<E> target = head;
         while (my != null) {
             if (!(my.equals(target.data))) {
                 return false;
@@ -192,7 +192,7 @@ public class MyLinkedList {
 
     public int hashCode() {
         int result = 1;
-        Node curr = head;
+        Node<E> curr = head;
         while (curr != null) {
             result = 31 * result + Objects.hash(curr);
             curr = curr.next;
@@ -203,7 +203,7 @@ public class MyLinkedList {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        Node temp = head;
+        Node<E> temp = head;
         sb.append("[");
         for (int i = 0; i < size(); i++) {
             sb.append(temp.data)
@@ -217,18 +217,16 @@ public class MyLinkedList {
         return String.valueOf(sb);
     }
 
-    @SuppressWarnings("rawtypes")
-    public ListIterator myListIterator(int index) {
+    public ListIterator<E> myListIterator(int index) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
         return new MyListIterator(index);
     }
 
-    @SuppressWarnings("rawtypes")
-    private class MyListIterator implements ListIterator {
-        private Node lastReturned;
-        private Node next;
+    private class MyListIterator implements ListIterator<E> {
+        private Node<E> lastReturned;
+        private Node<E> next;
         private int nextIndex;
 
         MyListIterator(int index) {
@@ -242,7 +240,7 @@ public class MyLinkedList {
         }
 
         @Override
-        public Object next() {
+        public E next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
@@ -258,7 +256,7 @@ public class MyLinkedList {
         }
 
         @Override
-        public Object previous() {
+        public E previous() {
             if (!hasPrevious()) {
                 throw new NoSuchElementException();
             }
@@ -283,7 +281,7 @@ public class MyLinkedList {
                 throw new IllegalStateException();
             }
 
-            Node lastNext = lastReturned.next;
+            Node<E> lastNext = lastReturned.next;
             int index = findIndex(lastReturned);
             MyLinkedList.this.remove(index);
             if (next == lastReturned) {
@@ -295,7 +293,7 @@ public class MyLinkedList {
         }
 
         @Override
-        public void set(Object o) {
+        public void set(E o) {
             if (lastReturned == null) {
                 throw new IllegalStateException();
             }
@@ -303,15 +301,15 @@ public class MyLinkedList {
         }
 
         @Override
-        public void add(Object o) {
+        public void add(E o) {
             lastReturned = null;
             MyLinkedList.this.add(o);
             nextIndex++;
         }
     }
 
-    private Node findNode(int index) {
-        Node temp = head;
+    private Node<E> findNode(int index) {
+        Node<E> temp = head;
         for (int i = 0; i < index; i++) {
             temp = temp.next;
         }
@@ -319,7 +317,7 @@ public class MyLinkedList {
     }
 
     private int findIndex(Object target) {
-        Node temp = head;
+        Node<E> temp = head;
         int index = -1;
         for (int i = 0; i < size(); i++) {
             if (temp.equals(target)) {
@@ -332,7 +330,7 @@ public class MyLinkedList {
     }
 
     private int findLastIndex(Object target) {
-        Node temp = head;
+        Node<E> temp = head;
         int index = -1;
         for (int i = 0; i < size(); i++) {
             if (temp.equals(target)) {
@@ -343,13 +341,13 @@ public class MyLinkedList {
         return index;
     }
 
-    private void linkNode(Node prev, Node next) {
+    private void linkNode(Node<E> prev, Node<E> next) {
         prev.next = next;
         next.prev = prev;
     }
 
-    private Object unlinkFirst(Node newHead) {
-        Node temp = head;
+    private Object unlinkFirst(Node<E> newHead) {
+        Node<E> temp = head;
         if (temp.equals(tail)) {
             head = null;
             tail = null;
@@ -362,8 +360,8 @@ public class MyLinkedList {
         return temp.data;
     }
 
-    private Object unlinkLast(Node newTail) {
-        Node temp = tail;
+    private Object unlinkLast(Node<E> newTail) {
+        Node<E> temp = tail;
         if (temp.equals(head)) {
             head = null;
             tail = null;
@@ -376,11 +374,11 @@ public class MyLinkedList {
         return temp.data;
     }
 
-    private Node newNode(Object o) {
-        return new Node(o);
+    private Node<E> newNode(E o) {
+        return new Node<>(o);
     }
 
-    private void firstAddChore(Node newNode) {
+    private void firstAddChore(Node<E> newNode) {
         head = newNode;
         tail = newNode;
         size++;

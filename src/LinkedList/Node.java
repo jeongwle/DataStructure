@@ -2,12 +2,12 @@ package LinkedList;
 
 import java.util.Objects;
 
-public class Node {
-    public Object data;
-    public Node next;
-    public Node prev;
+public class Node<E> {
+    public E data;
+    public Node<E> next;
+    public Node<E> prev;
 
-    public Node(Object data) {
+    public Node(E data) {
         this.data = data;
         this.next = null;
         this.prev = null;
