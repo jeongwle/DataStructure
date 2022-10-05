@@ -1,6 +1,6 @@
 package Queue;
 
-public interface Queue<E> {
+public interface QueueInterface<E> {
 
     /**
      *
@@ -26,9 +26,10 @@ public interface Queue<E> {
 
     /**
      *
-     * @param e - Queue에 추가할 객체
+     * @param e Queue에 추가할 객체
      * @return 성공 시 true 실패 시 false
      */
+    @SuppressWarnings("UnusedReturnValue")
     boolean offer(E e);
 
     /**

@@ -1,33 +1,63 @@
 package Queue;
 
-public class MyQueue<E> implements Queue<E> {
+import LinkedList.MyLinkedList;
+
+import java.util.NoSuchElementException;
+
+public class MyQueue<E> extends MyLinkedList<E> implements QueueInterface<E> {
+
+    public MyQueue() {
+        super();
+    }
     @Override
+
     public boolean add(E e) {
-        return false;
+        checkSize();
+        return super.add(e);
     }
 
     @Override
     public E remove() {
-        return null;
+        checkEmpty();
+        return super.removeFirst();
     }
 
     @Override
     public E element() {
-        return null;
+        checkEmpty();
+        return super.get(0);
     }
 
     @Override
     public boolean offer(E e) {
-        return false;
+        return this.add(e);
     }
 
     @Override
     public E poll() {
-        return null;
+        if (super.isEmpty()) {
+            return null;
+        }
+        return super.removeFirst();
     }
 
     @Override
     public E peek() {
-        return null;
+        if (super.isEmpty()) {
+            return null;
+        }
+        return super.get(0);
+    }
+
+    private void checkSize() {
+        if (size == Integer.MAX_VALUE) {
+            throw new IllegalStateException();
+        }
+    }
+
+    private void checkEmpty() {
+        if (super.isEmpty()) {
+            throw new NoSuchElementException();
+        }
     }
 }
