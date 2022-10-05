@@ -82,7 +82,7 @@ public class MyLinkedList<E> {
     removeLast : 맨 마지막 노드를 삭제
      */
 
-    public Object remove() {
+    public E remove() {
         return removeFirst();
     }
 
@@ -95,7 +95,7 @@ public class MyLinkedList<E> {
         return true;
     }
 
-    public Object remove(int index) {
+    public E remove(int index) {
         checkIndex(index, size);
         Node<E> target = findNode(index);
         if (index == 0) {
@@ -109,14 +109,14 @@ public class MyLinkedList<E> {
         return target.data;
     }
 
-    public Object removeFirst() {
+    public E removeFirst() {
         if (this.size() == 0) {
             throw new NoSuchElementException();
         }
         return unlinkFirst(head.next);
     }
 
-    public Object removeLast() {
+    public E removeLast() {
         if (this.size() == 0) {
             throw new NoSuchElementException();
         }
@@ -142,31 +142,31 @@ public class MyLinkedList<E> {
         return index != -1;
     }
 
-    public Object element() {
+    public E element() {
         if (size == 0) {
             throw new NoSuchElementException();
         }
         return head.data;
     }
 
-    public Object get(int index) {
+    public E get(int index) {
         checkIndex(index, size);
         Node<E> result = findNode(index);
         return result.data;
     }
 
-    public int indexOf(Object o) {
+    public int indexOf(E o) {
         return findIndex(o);
     }
 
-    public int lastIndexOf(Object o) {
+    public int lastIndexOf(E o) {
         return findLastIndex(o);
     }
 
-    public Object set(int index, E element) {
+    public E set(int index, E element) {
         checkIndex(index, size);
         Node<E> old = findNode(index);
-        Object temp = old.data;
+        E temp = old.data;
         old.data = element;
         return temp;
     }
@@ -346,7 +346,7 @@ public class MyLinkedList<E> {
         next.prev = prev;
     }
 
-    private Object unlinkFirst(Node<E> newHead) {
+    private E unlinkFirst(Node<E> newHead) {
         Node<E> temp = head;
         if (temp.equals(tail)) {
             head = null;
@@ -360,7 +360,7 @@ public class MyLinkedList<E> {
         return temp.data;
     }
 
-    private Object unlinkLast(Node<E> newTail) {
+    private E unlinkLast(Node<E> newTail) {
         Node<E> temp = tail;
         if (temp.equals(head)) {
             head = null;
